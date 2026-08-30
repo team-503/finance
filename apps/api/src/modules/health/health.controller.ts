@@ -1,8 +1,9 @@
 import { Controller, Get } from '@nestjs/common'
 import { HealthCheck, HealthCheckService, MemoryHealthIndicator } from '@nestjs/terminus'
+import { SkipThrottle } from '@nestjs/throttler'
+import { HEAP_LIMIT } from './constants.js'
 
-const HEAP_LIMIT_BYTES = 256 * 1024 * 1024
-
+@SkipThrottle()
 @Controller('healthcheck')
 export class HealthController {
     constructor(
@@ -13,6 +14,6 @@ export class HealthController {
     @Get()
     @HealthCheck()
     check() {
-        return this.health.check([() => this.memory.checkHeap('memory_heap', HEAP_LIMIT_BYTES)])
+        return this.health.check([() => this.memory.checkHeap('memory_heap', HEAP_LIMIT)])
     }
 }

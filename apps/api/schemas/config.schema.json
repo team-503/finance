@@ -1,0 +1,24 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+        "cors": {
+            "type": "object",
+            "properties": {
+                "origins": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "uri"
+                    }
+                }
+            },
+            "required": ["origins"],
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false,
+    "title": "finance api config",
+    "description": "Generated from src/modules/config/schema.ts. Do not edit by hand — run `pnpm generate:config-schema`."
+}

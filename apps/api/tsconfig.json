@@ -2,8 +2,10 @@
     "extends": "@repo/typescript-config/nestjs.json",
     "compilerOptions": {
         "outDir": "dist",
-        "types": ["vitest/globals", "node"]
+        "types": ["node"],
+        "allowImportingTsExtensions": true,
+        "noEmit": true
     },
-    "include": ["src", "vitest.config.ts"],
+    "include": ["src", "scripts"],
     "exclude": ["node_modules", "dist"]
 }

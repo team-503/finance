@@ -17,7 +17,7 @@
         "dev": {
             "cache": false,
             "persistent": true,
-            "env": ["NODE_ENV", "PORT", "NEXT_PUBLIC_API_URL"]
+            "env": ["NODE_ENV", "PORT", "TZ", "NEXT_PUBLIC_API_URL"]
         }
     }
 }

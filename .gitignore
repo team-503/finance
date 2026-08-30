@@ -385,3 +385,6 @@ $RECYCLE.BIN/
 
 ### Claude Code ###
 .claude/settings.local.json
+
+### app config ###
+**/config/local*.yaml
