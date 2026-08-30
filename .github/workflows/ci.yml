@@ -29,6 +29,11 @@ jobs:
 
             - run: pnpm format:check
 
+            - name: config schema is up to date
+              run: |
+                  pnpm --filter=api generate:config-schema
+                  git diff --exit-code apps/api/schemas/config.schema.json
+
             - run: pnpm lint
 
             - run: pnpm typecheck
