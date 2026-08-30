@@ -52,7 +52,7 @@ pnpm dev --filter=web
 
 **Валідація на zod, а не на class-validator.** Глобально стоїть `StandardSchemaValidationPipe`, схеми вішаються на `@Body({ schema })`. Це той самий zod, що й у схемах `env` і `config`, тож `class-validator` і `class-transformer` у репо немає і не треба.
 
-**Логи структуровані, пишуться через pino.** Логуй звичайним `new Logger('Контекст')` з `@nestjs/common` — `app.useLogger()` разом із `bufferLogs: true` заводить усе, включно з власними логами Nest, у pino. У розробці вивід іде через `pino-pretty`, у продакшні — рядки JSON. Рівень задає `LOG_LEVEL`.
+**Логи структуровані, пишуться через pino.** Логуй звичайним `new Logger('Контекст')` з `@nestjs/common` — `app.useLogger()` разом із `bufferLogs: true` заводить усе, включно з власними логами Nest, у pino. У розробці вивід іде через `pino-pretty` у форматі Nest — `[21:21:47.988] INFO: [NestFactory] Starting Nest application...`, контекст у дужках перед повідомленням, без pid і hostname. У продакшні — рядки JSON, там pid і hostname лишаються, бо за ними збирають. Рівень задає `LOG_LEVEL`.
 
 **Внутрішні помилки назовні не виходять.** Глобальний `AllExceptionsFilter` пропускає `HttpException` як є — разом із повідомленнями zod із валідації — а все інше перетворює на голий 500 і пише справжній стек у лог. Кидаєш `HttpException`, коли клієнт має щось прочитати; кидаєш звичайну помилку, коли ні.
 
