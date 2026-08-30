@@ -4,7 +4,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "generate:config-schema": "node scripts/generate-config-schema.ts",
+        "generate:config-schema": "node scripts/generate-config-schema.ts && prettier --write schemas/config.schema.json",
         "build": "nest build",
         "dev": "nest start --watch",
         "start": "node dist/main.js",
@@ -40,6 +40,7 @@
         "@types/ms": "2.1.0",
         "@types/node": "26.3.0",
         "eslint": "10.9.1",
+        "prettier": "3.9.6",
         "typescript": "6.0.3",
         "vite-tsconfig-paths": "6.1.1",
         "vitest": "4.1.11"

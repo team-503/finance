@@ -44,7 +44,7 @@ pnpm dev --filter=web
 
 **Налаштування розділені надвоє.** `modules/env` читає `process.env` — те, що різниться між деплоями і буває секретним. `modules/config` читає `config/*.yaml` через node-config — усе несекретне. Обидва однакової форми: `schema.ts` із zod, поруч клас, який парсить, зливається з `DeepReadonly<z.infer<...>>` і морозиться `deepFreeze`. `@nestjs/config` у репо немає: `env` і `config` імпортуються напряму, без DI.
 
-**Схема yaml-конфігу генерується.** `pnpm --filter=api generate:config-schema` перезаписує `schemas/config.schema.json` із `modules/config/schema.ts`, а `config/default.yaml` посилається на неї коментарем `yaml-language-server`. Міняєш схему — перегенеруй, інакше редактор підказуватиме старе.
+**Схема yaml-конфігу генерується.** `pnpm --filter=api generate:config-schema` перезаписує `schemas/config.schema.json` із `modules/config/schema.ts`, а `config/default.yaml` посилається на неї коментарем `yaml-language-server`. Міняєш схему — перегенеруй: CI робить те саме і валить збірку, якщо результат відрізняється від закоміченого. Скрипт після генерації прогонить файл через prettier — інакше форматер і генератор розходяться на кожному прогоні (prettier згортає короткі масиви, `JSON.stringify` їх розгортає) і перевірка не проходила б ніколи.
 
 **`config` і `env` заморожені.** Присвоєння кидає `TypeError`, схеми `.strict()`, тож зайвий чи неправильно названий ключ у yaml валить старт, а не ігнорується.
 
