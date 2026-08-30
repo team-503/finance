@@ -11,6 +11,7 @@ async function bootstrap() {
 
     app.enableCors({ origin: config.cors.origins, credentials: true })
     app.useGlobalPipes(new StandardSchemaValidationPipe())
+    app.enableShutdownHooks()
 
     await app.listen(env.PORT)
 }
