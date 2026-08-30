@@ -38,10 +38,10 @@
         "@swc/core": "1.16.1",
         "@types/bytes": "3.1.6",
         "@types/ms": "2.1.0",
-        "@types/node": "26.3.0",
+        "@types/node": "26.4.0",
         "eslint": "10.9.1",
         "prettier": "3.9.6",
-        "typescript": "6.0.3",
+        "typescript": "7.0.2",
         "vite-tsconfig-paths": "6.1.1",
         "vitest": "4.1.11"
     }
