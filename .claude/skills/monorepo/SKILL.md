@@ -17,7 +17,7 @@ pnpm workspaces + Turborepo. Node 24 (`.nvmrc`), pnpm 11.
 | `packages/eslint-config`     | `@repo/eslint-config` — `base`, `next-js`, `node`          |
 | `packages/typescript-config` | `@repo/typescript-config` — `base`, `nextjs`, `nestjs`     |
 
-Бекенд віддає `GET /healthcheck` через `@nestjs/terminus`. Модулі бекенда живуть у `apps/api/src/modules/<назва>` — там же лежить і `env` зі схемою змінних оточення.
+Бекенд віддає `GET /healthcheck` через `@nestjs/terminus`. Модулі бекенда живуть у `apps/api/src/modules/<назва>`.
 
 ## Команди
 
@@ -42,13 +42,25 @@ pnpm dev --filter=web
 
 **Тестів немає.** Дивись `.claude/rules/testing.md`. Не додавай тестових файлів, раннерів і задачі `test`. `apps/api/vitest.config.ts` лежить готовим на майбутнє — не чіпай його і не заводь навколо нього скриптів.
 
+**Налаштування розділені надвоє.** `modules/env` читає `process.env` — те, що різниться між деплоями і буває секретним. `modules/config` читає `config/*.yaml` через node-config — усе несекретне. Обидва однакової форми: `schema.ts` із zod, поруч клас, який парсить, зливається з `DeepReadonly<z.infer<...>>` і морозиться `deepFreeze`. `@nestjs/config` у репо немає: `env` і `config` імпортуються напряму, без DI.
+
+**Схема yaml-конфігу генерується.** `pnpm --filter=api generate:config-schema` перезаписує `schemas/config.schema.json` із `modules/config/schema.ts`, а `config/default.yaml` посилається на неї коментарем `yaml-language-server`. Міняєш схему — перегенеруй, інакше редактор підказуватиме старе.
+
+**`config` і `env` заморожені.** Присвоєння кидає `TypeError`, схеми `.strict()`, тож зайвий чи неправильно названий ключ у yaml валить старт, а не ігнорується.
+
+**`src/setup.ts` виставляє `TZ=UTC`** і має лишатися першим імпортом у `main.ts`. Для фінансових даних локальна зона машини — джерело мовчазних розбіжностей.
+
+**Валідація на zod, а не на class-validator.** Глобально стоїть `StandardSchemaValidationPipe`, схеми вішаються на `@Body({ schema })`. Це той самий zod, що й у схемах `env` і `config`, тож `class-validator` і `class-transformer` у репо немає і не треба.
+
+**`/healthcheck` не рахується рейт-лімітом.** На контролері стоїть `@SkipThrottle()` — інакше зонд, що стукає щосекунди, вичерпав би ліміт і почав отримувати 429 замість статусу.
+
 **SWC не перевіряє типи.** `nest build` лише транспілює, тож зламаний тип доїде до `dist` мовчки. `pnpm typecheck` — єдина перепона, ганяй його перед тим, як вважати зміну в бекенді завершеною.
 
 **TypeScript розділений навмисне.** Репо на TS 7, але `apps/api` прибитий до TS 6: Nest CLI потребує програмного API компілятора, яке TS 7.0 викинув, а TS 7.1 обіцяє повернути. Не зводь версії до однієї, доки це не станеться.
 
 **Nest 12 — це ESM.** `apps/api` має `"type": "module"`, тому відносні імпорти пишуться з розширенням `.js` (`./health.module.js`), навіть коли файл насправді `.ts`. `.swcrc` віддає `es6`-модулі, щоб збігалося.
 
-**Terminus оголошує не той діапазон peer-залежностей.** `@nestjs/terminus@11.1.1` просить Nest `^10 || ^11`, а в нас 12. `pnpm peers check` свариться, застосунок працює. Прибери попередження, коли terminus випустить версію під Nest 12.
+**Два пакети оголошують не той діапазон peer-залежностей.** `@nestjs/terminus@11.1.1` просить Nest `^10 || ^11`, `@nestjs/throttler@6.5.0` — до `^11`, а в нас 12. `pnpm peers check` свариться на обох, обидва працюють — перевірено на живому. Прибери попередження, коли вийдуть версії під Nest 12.
 
 **`base.json` не прив'язаний до платформи.** У ньому немає `DOM`; `DOM` і `DOM.Iterable` додає `nextjs.json`. Не тягни браузерні типи в базу, інакше бекенд почне бачити `document`.
 

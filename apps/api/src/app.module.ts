@@ -1,15 +1,8 @@
 import { Module } from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
-import { envSchema } from './modules/env/schema.js'
 import { HealthModule } from './modules/health/health.module.js'
+import { RateLimitModule } from './modules/rate-limit/rate-limit.module.js'
 
 @Module({
-    imports: [
-        ConfigModule.forRoot({
-            isGlobal: true,
-            validationSchema: envSchema,
-        }),
-        HealthModule,
-    ],
+    imports: [RateLimitModule, HealthModule],
 })
 export class AppModule {}
