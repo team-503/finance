@@ -12,7 +12,6 @@ permissions:
 
 jobs:
     checks:
-        name: format, lint, types, build
         runs-on: ubuntu-latest
         env:
             HUSKY: 0
