@@ -17,7 +17,7 @@ pnpm workspaces + Turborepo. Node 24 (`.nvmrc`), pnpm 11.
 | `packages/eslint-config`     | `@repo/eslint-config` — `base`, `next-js`, `node`          |
 | `packages/typescript-config` | `@repo/typescript-config` — `base`, `nextjs`, `nestjs`     |
 
-Бекенд віддає `GET /healthcheck` через `@nestjs/terminus`, модуль лежить у `apps/api/src/health`.
+Бекенд віддає `GET /healthcheck` через `@nestjs/terminus`. Модулі бекенда живуть у `apps/api/src/modules/<назва>` — там же лежить і `env` зі схемою змінних оточення.
 
 ## Команди
 
